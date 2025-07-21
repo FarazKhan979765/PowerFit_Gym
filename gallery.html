@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerFit Gym - Gallery</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #1a1a1a;
+            --text-light: #ffffff;
+            --gradient: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--secondary-color);
+            padding-top: 80px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(26, 26, 26, 0.95) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color) !important;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            font-weight: bold;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 250px;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 107, 53, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay i {
+            font-size: 2rem;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        .gallery-caption h5 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-caption p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+
+        /* Modal Styles */
+        .modal-dialog {
+            max-width: 90%;
+        }
+
+        .modal-content {
+            background: transparent;
+            border: none;
+        }
+
+        .modal-body {
+            padding: 0;
+            text-align: center;
+        }
+
+        .modal-body img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: #ccc;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .section-title h2 {
+                font-size: 2.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .gallery-item {
+                height: 200px;
+            }
+
+            .modal-dialog {
+                max-width: 95%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .gallery-item {
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <i class="fas fa-dumbbell"></i> PowerFit
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#trainers">Trainers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#reviews">Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="gallery.html">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Gym Gallery</h2>
+                <p>Take a look at our state-of-the-art facilities and see where your fitness journey will take place</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery1.jpg">
+                    <img src="Images/gallery1.jpg" alt="Modern Gym Interior">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Modern Gym Interior</h5>
+                        <p>State-of-the-art equipment and spacious workout areas</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="Images/gallery2.jpg">
+                    <img src="Images/gallery2.jpg" alt="Weight Training Area">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Weight Training Zone</h5>
+                        <p>Professional-grade weights and strength equipment</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery3.jpg">
+                    <img src="Images/gallery3.jpg" alt="Cardio Section">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Cardio Section</h5>
+                        <p>Latest treadmills, bikes, and cardio machines</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery4.jpg">
+                    <img src="Images/gallery4.jpg" alt="Group Fitness Studio">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Group Fitness Studio</h5>
+                        <p>Spacious area for yoga, aerobics, and group classes</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery5.jpg">
+                    <img src="Images/gallery5.jpg" alt="Free Weights Area">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Free Weights Area</h5>
+                        <p>Complete collection of dumbbe
+                            lls and barbells</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery6.jpg">
+                    <img src="Images/gallery6.jpg" alt="Functional Training">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Functional Training</h5>
+                        <p>CrossFit and functional fitness equipment</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery7.jpg">
+                    <img src="Images/gallery7.jpg" alt="Locker Room">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Premium Locker Room</h5>
+                        <p>Clean and modern changing facilities</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery8.jpg">
+                    <img src="Images/gallery8.jpg" alt="Personal Training">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Personal Training Area</h5>
+                        <p>Dedicated space for one-on-one training sessions</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery9.jpg">
+                    <img src="Images/gallery9.jpg" alt="Stretching Area">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Stretching & Recovery</h5>
+                        <p>Dedicated area for stretching and recovery</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="images/gallery10.jpg">
+                    <img src="Images/gallery10.jpg" alt="Reception Area">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Reception & Lounge</h5>
+                        <p>Welcoming entrance and comfortable seating area</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Gallery Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <h4>PowerFit Gym</h4>
+                    <p>Transform your body and mind with our comprehensive fitness programs and expert guidance.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#trainers">Trainers</a></li>
+                        <li><a href="index.html#reviews">Reviews</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>Services</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html#services">Strength Training</a></li>
+                        <li><a href="index.html#services">Cardio Fitness</a></li>
+                        <li><a href="index.html#services">Group Classes</a></li>
+                        <li><a href="index.html#services">Personal Training</a></li>
+                        <li><a href="index.html#services">Nutrition Coaching</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>Contact Info</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Fitness Street, Gym City</li>
+                        <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@powerfitgym.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 5AM-11PM</li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="margin: 2rem 0; border-color: #444;">
+            <div class="row">
+                <div class="col-md-4 text-start">
+                    <p>&copy; 2025 PowerFit Gym. All rights reserved.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <p>Privacy Policy | Terms of Service</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <p>Designed by <a href="https://www.linkedin.com/in/mohd-faraz-khan-12a87a267/" style="color: white; text-decoration: none;" target="_blank">Faraz Khan</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Modal image functionality
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const imageSrc = this.getAttribute('data-image');
+                document.getElementById('modalImage').src = imageSrc;
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(26, 26, 26, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(26, 26, 26, 0.95)';
+            }
+        });
+
+        // Mobile menu close on link click
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                if (navbarCollapse.classList.contains('show')) {
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                    bsCollapse.hide();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
